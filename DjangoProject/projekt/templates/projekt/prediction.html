@@ -1,0 +1,40 @@
+{%extends 'projekt/post_list.html'%}
+{%block content%}
+{% load staticfiles %}
+        <div class = 'post'>
+            <h2>Kilka danych historycznych wykorzystane do obliczeń <span class ='coin'> {{name}}/USD</span>
+            </h2>
+            <table class="coins">
+              <tr>
+                <th>Nazwa</th>
+                <th>Data</th>
+                <th>Cena</th>
+              </tr>
+                {% for post in posts %}
+                  <tr>
+                     <td> {{post.nazwa}}</td>
+                     <td> {{post.data}}</td>
+                     <td> {{post.cena}}</td>
+                  </tr>
+                {% endfor %}
+              </table>
+              <h2>Przewidywana najwyższa cena dzisiaj:</h2>
+              <table class="coins">
+                <tr>
+                  <th>Przewidziana cena</th>
+                  <th>Ostatnia cena</th>
+                  <th>Kup/Sprzedaj</th>
+                </tr>
+                    <tr>
+                       <td> {{predicted}}</td>
+                       <td> {{last_price}}</td>
+                       <td> {%if predicted > last_price%}
+                            <span style = "color:green">Kup</span>
+                            {%elif predicted < last_price%}
+                            <span style = "color:red">Sprzedaj</span>
+                            {%endif%}
+                       </td>
+                    </tr>
+                </table>
+        </div>
+{%endblock%}

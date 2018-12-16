@@ -1,0 +1,39 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Przewidywanie Ceny</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/projekt.css' %}">
+        <link rel="stylesheet" href="{% static 'css/post_line.css' %}">
+    </head>
+    <body>
+        <div class = 'page-header'>
+             <h1>
+               <a href = "{% url 'post_list' %}">Przewidywanie ceny walut</a>
+               <img src="{% static "img/dollar-symbol.png" %}" alt="My image">
+             </h1>
+        </div>
+        <div id = "form">
+          <h2>Wybierz walute której cene chcesz przewidzieć!</h2>
+          <form action="{% url 'prediction' %}" method="post" >
+            {% csrf_token %}
+            <select name ="coins">
+              <option selected="selected">BTC</option>
+              <option value="ETH">ETH</option>
+              <option value="XRP">XRP</option>
+              <option value="LTC">LTC</option>
+              <option value="TRX">TRX</option>
+            </select>
+            <input type="submit" value="Select">
+          </form>
+        </div>
+          {%block content%}
+          {%endblock%}
+        <hr>
+        <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+        </div>
+    </body>
+</html>
