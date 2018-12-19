@@ -1,0 +1,92 @@
+h1 a{
+    color: #FCA205;
+    font-family:'Lobster';
+}
+.page-header {
+    padding-left: 55px;
+    background-color: #ff9400;
+    margin-top: 0;
+    padding: 20px 20px 20px 40px;
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 36pt;
+    text-decoration: none;
+}
+
+.content {
+    margin-left: 40px;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Cinzel', cursive;
+}
+
+.post-form textarea, .post-form input {
+    width: 100%;
+}
+
+.post {
+    padding-left: 15px;
+    padding-right:15px;
+}
+table td tr{
+  border:1px solid black;
+}
+.coins {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.coins td, .coins th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.coins th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+.coins tr:nth-child(even){background-color: #f2f2f2;}
+
+.coins tr:hover {background-color: #ddd;}
+
+.coin{
+  font-family:"Times New Roman";
+  color:#FCA205;
+}
+hr.style-seven {
+    overflow: visible; /* For IE */
+    height: 30px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 0 0 0;
+    border-radius: 20px;
+}
+hr {
+    overflow: visible; /* For IE */
+    padding: 0;
+    border: none;
+    border-top: medium double #333;
+    color: #333;
+    text-align: center;
+}
+hr:after {
+    content: "$";
+    display: inline-block;
+    position: relative;
+    top: -0.7em;
+    font-size: 1.5em;
+    padding: 0 0.25em;
+    background: white;
+    margin-left:0 15px 0 15px;
+}
+
+#form{
+  padding-left:15px;
+}
