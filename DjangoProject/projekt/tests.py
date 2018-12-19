@@ -28,8 +28,8 @@ class DaneTestCase(TestCase):
         Dane.objects.all().delete()
 
     def test_dataFromQuandl(self):
-        df = quandl.get("BITFINEX/BTCUSD", rows = "1")
-        isinstance(df, np.ndarray)
+        df = quandl.get("BITFINEX/BTCUSD",returns = "numpy", rows = "1")
+        return isinstance(df, np.ndarray)
 
     def test_actual_price(self):
         test_object = requests.get('https://api.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist').json()
