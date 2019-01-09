@@ -38,10 +38,10 @@ def prediction_all(name,df_column,df_main):
     forecast_prediction = clf.predict(X_forecast)
     return forecast_prediction
 
-def predicted_price(name, data):
+def predicted_price(name):
     #get data from bitfinex echange for 'name' - specified coin
     #start_date="2001-12-31", end_date="2005-12-31")
-    df_main = quandl.get("BITFINEX/"+name+"USD", rows = "2000", start_date = "2014-01-01", end_date = data)
+    df_main = quandl.get("BITFINEX/"+name+"USD", rows = "2000")
     # For calculations we need only column  with hightest price
     #df = df_main[['Last']]
     database_adder(name, df_main)
@@ -135,3 +135,28 @@ def database_adder(name, df):
 def actual_price(name):
     resp_json = requests.get('https://api.bitfinex.com/v2/candles/trade:1m:t'+name+"USD/hist").json()
     return resp_json[0][2]
+
+def chart(name):
+    df_main = quandl.get("BITFINEX/"+name+"USD", rows = "2000")
+    #Chart
+    trace = go.Candlestick(x=df_main.index,
+            open = df_main['Mid'],
+            high=df_main['High'],
+            low=df_main['Low'],
+            close=df_main['Last'])
+
+    layout = go.Layout(
+    title=name+'/USD chart',
+    yaxis=dict(
+        title='Price $',
+        titlefont=dict(
+            family='Courier New, monospace',
+            size=18,
+            color='#7f7f7f'
+            )
+        )
+    )
+    data = [trace]
+    #data = go.Figure(data=data, layout=layout)
+    #py.plot(data,layout,filename = 'chart', auto_open=False)
+    #py.image.save_as({'data': data}, 'projekt/static/img/simplecandlestick.png')

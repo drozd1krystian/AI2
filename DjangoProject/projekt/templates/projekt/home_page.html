@@ -1,0 +1,16 @@
+{%extends 'projekt/template.html'%}
+{%block content%}
+  <div id = "form">
+    <h2>Wstęp:</h2>
+    <p>
+      Witaj na stronie do przewidywania cen kryptowalut. Algorytm wyznaczający cene wykorzystuje język <b>python</b> a dokładniej bibliotekę <b>sklearn. Dane dostarczane są poprzez bibliotekę
+      <a href = "https://www.quandl.com/data/BITFINEX/BTCUSD-BTC-USD-Exchange-Rate"><b> QUANDL.</b></a>
+      <br></b> W zakładce <b>Przewidywanie ceny </b> znajduje się formularz z którego możesz wybrać nazwę kryptowaluty której cenę chesz przewidzieć. Dostępne jest tylko kilka podstawowych walut w tym np. <b>BTC</b>, <b>ETH</b>.
+      Po wybraniu waluty i nacisnięciu przycisku formularza zostanie wyświetlona tabelka z kilkoma danymi wykorzystanymi do obliczeń, tabelka z przewidzianą i aktualną ceną oraz propozycja   <span style = "color:green">kupna</span> bądź   <span style = "color:red">sprzedaży</span>. Poniżej znajdować się będzie interaktywny wykres przebiegu ceny, który można zapisać jako obraz.png.
+      <br> <h4>Powodzenia!</h4>
+
+      </p>
+
+      </div>
+
+{%endblock%}

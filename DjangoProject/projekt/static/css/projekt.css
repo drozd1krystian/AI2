@@ -1,3 +1,4 @@
+body{background-color: red;}
 h1 a{
     color: #FCA205;
     font-family:'Lobster';
@@ -89,4 +90,15 @@ hr:after {
 
 #form{
   padding-left:15px;
+}
+.chart{
+  width:50%;
+  height:25%;
+  align:left;
+}
+.tekst{
+  width:50%;
+  height:25%;
+  align:right;
+  display:block;
 }

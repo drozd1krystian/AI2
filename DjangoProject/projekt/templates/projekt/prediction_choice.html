@@ -1,0 +1,13 @@
+{%extends 'projekt/template.html'%}
+{%block content%}
+{% load staticfiles %}
+{% load static%}
+        <div id = "form">
+          <h2>Wybierz walute której cene chcesz przewidzieć!</h2>
+          <form action="{% url 'prediction' %}" method="post">
+            {% csrf_token %}
+            {{form}}
+            {{form.instance.BTC}}
+            <input type="submit" value="Select" class =" btn btn-default">
+          </form>
+{%endblock%}
