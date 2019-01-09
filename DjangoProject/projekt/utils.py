@@ -7,7 +7,7 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 import plotly.io as pio
 import os
-from .models import Dane
+from .models import Dane, Results
 from datetime import datetime, timedelta,date
 from sklearn.linear_model import LinearRegression
 from sklearn import preprocessing, svm
@@ -38,13 +38,10 @@ def prediction_all(name,df_column,df_main):
     forecast_prediction = clf.predict(X_forecast)
     return forecast_prediction
 
-def predicted_price(name, data):
+def predicted_price(name, data, checker = True):
     #get data from bitfinex echange for 'name' - specified coin
-    #start_date="2001-12-31", end_date="2005-12-31")
-    df_main = quandl.get("BITFINEX/"+name+"USD", rows = "2000", start_date = "2014-01-01", end_date = data)
-    # For calculations we need only column  with hightest price
-    #df = df_main[['Last']]
-    database_adder(name, df_main)
+    df_main = quandl.get("BITFINEX/"+name+"USD", start_date = "2014-01-01", end_date = data)
+    predicted_price = []
 
     predicted_data = prediction_all(name,'Mid',df_main)
     open = []
@@ -64,74 +61,79 @@ def predicted_price(name, data):
     predicted_data = prediction_all(name,'Last',df_main)
     close = []
     close = df_main['Last'].tolist()
+    predicted_price.append(close[-1])
     close.extend(predicted_data)
-    """
-    forecast_out = int(1) # predicting 1 day into future
-    df['Prediction'] = df[['Last']].shift(-forecast_out) #  label column with data shifted 1 unit up
 
-    X = np.array(df.drop(['Prediction'], 1))
-    X = preprocessing.scale(X)
-    X_forecast = X[-forecast_out:] # set X_forecast equal to last 1
-
-    X = X[:-forecast_out] # remove last 1 from X
-    y = np.array(df['Prediction'])
-    y = y[:-forecast_out]
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
-
-    # Training
-    clf = LinearRegression()
-    clf.fit(X_train,y_train)
-    # Testing
-    confidence = clf.score(X_test, y_test)
-    forecast_prediction = clf.predict(X_forecast)
-    #chart
-    chart(name) # draws a chart with orginal data
-
-    price = []
-    price.extend(df_main['Last'].tolist())
-    price.append(forecast_prediction[0])
-    """
     chart_date = df_main.index.tolist()
-    for i in range(0,31):
+    for i in range(0,1):
         chart_date.append(date.today()+timedelta(i))
 
-    trace = go.Candlestick(x=chart_date,
-            open = open,
-            high=high,
-            low=low,
-            close =close)
+    if checker:
+        trace = go.Candlestick(x=chart_date,
+                open = open,
+                high=high,
+                low=low,
+                close =close)
 
-    layout = go.Layout(
-    title=name+'/USD predicted chart',
-    yaxis=dict(
-        title='Price $',
-        titlefont=dict(
-            family='Courier New, monospace',
-            size=18,
-            color='#7f7f7f'
+        layout = go.Layout(
+        title=name+'/USD predicted chart',
+        yaxis=dict(
+            title='Price $',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=18,
+                color='#7f7f7f'
+                )
             )
         )
-    )
-    data = [trace]
-    data = go.Figure(data=data, layout=layout)
-    py.plot(data,layout,filename = 'predictedchart', auto_open=False)
-    return predicted_data[0]
+        data = [trace]
+        #data = go.Figure(data=data, layout=layout)
+        #py.plot(data,layout,filename = 'predictedchart', auto_open=False)
+    if name == "BTC" or name == "ETH":
+        predicted_price.append(round(predicted_data[0],2))
+    else:
+        predicted_price.append(round(predicted_data[0],4))
+    return predicted_price
 
-def database_adder(name, df):
+def database_adder(name, rows):
     #get data from echchange as numpy table and insert them to database
-    l_daty = 0 # iteral to get dates: 1 for yesterday etc.
-    df2 = quandl.get("BITFINEX/"+name+"USD",returns = "numpy",rows = "5")
-    x = df.index.to_pydatetime()    #change index to dateformat
-    dl = len(x)-1
+    df2 = quandl.get("BITFINEX/"+name+"USD",returns = "numpy",rows = rows)
     Dane.objects.all().delete()
     for i in range(4,-1,-1):
-        date_input = x[dl-l_daty]
-        model = Dane(nazwa = name ,data =date_input.strftime('%B %d, %Y'),cena = round(df2[i][4],1))
-        l_daty +=1
+        date_as_string = str(df2[i][0])
+        if name == "BTC" or name == "ETH":
+            cena = round(df2[i][4],2)
+        else:
+            cena = round(df2[i][4],4)
+        model = Dane(nazwa = name, data = date_as_string[0:10], cena = cena)
         model.save()
     #end of adding data
+    return df2
 
 def actual_price(name):
     resp_json = requests.get('https://api.bitfinex.com/v2/candles/trade:1m:t'+name+"USD/hist").json()
-    return resp_json[0][2]
+    if name == "BTC" or name == "ETH":
+        price = round(resp_json[0][2],2)
+    else:
+        price = round(resp_json[0][2],4)
+    return price
+
+def add_results(name, data, price, close):
+    if name =="BTC" or name == "ETH":
+        price = round(price,2)
+        close = round(close,2)
+    else:
+        price = round(price,4)
+    model = Results(nazwa = name, data = data[0:10], cena = price, zamkniecie = close)
+    model.save()
+
+def compare_results(date_results):
+    Results.objects.all().delete()
+    list = ["BTC","ETH"]
+    checker = False # so it won't draw chart again for those coins
+    #Podaj date np. 7 stycznia to podajemy 7-1 czyli 6 stycznia i liczy nam dla 7
+    for name in list:
+        for i in range(3,1,-1):
+            date_as_string = str(date_results[i][0])
+            price = predicted_price(name, str(date_results[i-1][0]), checker)
+            add_results(name, date_as_string[0:10], price[1],price[0])

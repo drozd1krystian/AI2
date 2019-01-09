@@ -7,5 +7,9 @@ class Dane(models.Model):
     data = models.CharField(max_length = 40)
     cena = models.FloatField()
 
-    def __str__(self):
-        return self.cena
+
+class Results(models.Model):
+    nazwa = models.CharField(max_length = 15)
+    data = models.CharField(max_length = 40)
+    cena = models.FloatField()
+    zamkniecie = models.FloatField(default = 0)

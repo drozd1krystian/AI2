@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Dane
+from .models import Dane, Results
 from .utils import *
 from datetime import datetime, timedelta,date
 from django.http import HttpResponseRedirect
@@ -28,14 +28,34 @@ def prediction_choice2(request):
             name = form.cleaned_data['coin_name']
             return name
 def prediction(request):
-    #Predict price
-    #Get coin name
+    #Get today's date, create form to put in html, get coin name, date for results
     data = str(date.today());
     form = NameForm()
     name =  str(prediction_choice2(request))
-    predicted = round(predicted_price(name,data),1)
+
+    #add sample data to database
+    database_adder(name,5)
+
+    #predicted price
+    predicted = predicted_price(name,data)
+
     #variables needed to post in html table
     posts = Dane.objects.filter(nazwa = name)
-    last_price = round(actual_price(name),1)
-    return render(request, 'projekt/prediction.html', {'posts': posts,'predicted':predicted,'last_price':last_price,
+    last_price = actual_price(name)
+
+    #return data
+    return render(request, 'projekt/prediction.html', {'posts': posts,'predicted':predicted[1],'last_price':last_price,
     'name':name,'form':form})
+
+def results(request):
+    #run function to check if predictions are close to right
+    compare_results(database_adder("BTC",5))
+
+    #get results from database
+    results_btc = Results.objects.filter(nazwa = "BTC")
+    results_eth = Results.objects.filter(nazwa = "ETH")
+    #results_xrp = Results.objects.filter(nazwa = "XRP")
+    #results_trx = Results.objects.filter(nazwa = "TRX")
+    #results_ltc = Results.objects.filter(nazwa = "LTC")
+
+    return render(request,'projekt/results.html',{'results_btc':results_btc,'results_eth':results_eth})

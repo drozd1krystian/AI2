@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.home_page),
     path('post_list', views.prediction_choice, name='prediction_choice'),
     path('prediction', views.prediction, name='prediction'),
-    path('homepage',views.home_page,name='homepage')
+    path('homepage',views.home_page,name='homepage'),
+    path('results',views.results,name='results')
 ]

@@ -1,0 +1,45 @@
+{%extends 'projekt/template.html'%}
+{%block content%}
+{% load staticfiles %}
+{% load static%}
+<div class = 'post'>
+  <h2>Porównanie rezultatów dla  <span class ='coin'> BTC/USD</span>
+  <table class="coins">
+    <tr>
+      <th>Nazwa</th>
+      <th>Data</th>
+      <th>Cena przewidziana</th>
+      <th>Cena zamknięcia</th>
+    </tr>
+    {% for btc in results_btc %}
+      <tr>
+          <td> {{btc.nazwa}}</td>
+          <td> {{btc.data}}</td>
+          <td> {{btc.cena}}</td>
+          <td> {{btc.zamkniecie}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+</div>
+<hr>
+<div class = 'post'>
+  <h2>Porównanie rezultatów dla  <span class ='coin'> ETH/USD</span>
+  <table class="coins">
+    <tr>
+      <th>Nazwa</th>
+      <th>Data</th>
+      <th>Cena przewidziana</th>
+      <th>Cena zamknięcia</th>
+    </tr>
+{% for eth in results_eth %}
+    </tr>
+        <tr>
+           <td> {{eth.nazwa}}</td>
+           <td> {{eth.data}}</td>
+           <td> {{eth.cena}}</td>
+           <td> {{eth.zamkniecie}}</td>
+        </tr>
+{% endfor %}
+  </table>
+</div>
+{%endblock%}

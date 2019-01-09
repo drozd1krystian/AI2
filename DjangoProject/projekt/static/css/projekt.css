@@ -1,4 +1,8 @@
-body{background-color: red;}
+body{
+  background-color: red;
+  padding-left:20px;
+  padding-right: 20px;
+}
 h1 a{
     color: #FCA205;
     font-family:'Lobster';
@@ -34,16 +38,19 @@ h1, h2, h3, h4 {
 }
 table td tr{
   border:1px solid black;
+  text-align: center;
 }
 .coins {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  text-align: center;
 }
 
 .coins td, .coins th {
   border: 1px solid #ddd;
   padding: 8px;
+  text-align: center;
 }
 
 .coins th {
@@ -52,6 +59,7 @@ table td tr{
   text-align: left;
   background-color: #4CAF50;
   color: white;
+  text-align: center;
 }
 .coins tr:nth-child(even){background-color: #f2f2f2;}
 
@@ -60,6 +68,7 @@ table td tr{
 .coin{
   font-family:"Times New Roman";
   color:#FCA205;
+  text-align: center;
 }
 hr.style-seven {
     overflow: visible; /* For IE */
@@ -90,6 +99,7 @@ hr:after {
 
 #form{
   padding-left:15px;
+  padding-right:15px;
 }
 .chart{
   width:50%;
