@@ -87,8 +87,8 @@ def predicted_price(name, data, checker = True):
             )
         )
         data = [trace]
-        #data = go.Figure(data=data, layout=layout)
-        #py.plot(data,layout,filename = 'predictedchart', auto_open=False)
+        data = go.Figure(data=data, layout=layout)
+        py.plot(data,layout,filename = 'predictedchart', auto_open=False)
     if name == "BTC" or name == "ETH":
         predicted_price.append(round(predicted_data[0],2))
     else:
