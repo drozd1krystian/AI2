@@ -1,6 +1,6 @@
 import requests
 import quandl
-import pandas as pd
+import pandas as py
 import numpy as np
 
 import plotly.plotly as py
@@ -39,35 +39,41 @@ def prediction_all(name,df_column,df_main):
     return forecast_prediction
 
 def predicted_price(name, data, checker = True):
-    #get data from bitfinex echange for 'name' - specified coin
+    #get data from bitfinex exchange for 'name' - specified coin
     df_main = quandl.get("BITFINEX/"+name+"USD", start_date = "2014-01-01", end_date = data)
     predicted_price = []
+    #check if this need to be calculated ( Don't need this for results part)
+    if checker:
+        predicted_data = prediction_all(name,'Mid',df_main)
+        open = []
+        open = df_main['Mid'].tolist()
+        open.extend(predicted_data)
 
-    predicted_data = prediction_all(name,'Mid',df_main)
-    open = []
-    open = df_main['Mid'].tolist()
-    open.extend(predicted_data)
+        predicted_data = prediction_all(name,'High',df_main)
+        hight = []
+        high = df_main['High'].tolist()
+        high.extend(predicted_data)
 
-    predicted_data = prediction_all(name,'High',df_main)
-    hight = []
-    high = df_main['High'].tolist()
-    high.extend(predicted_data)
+        predicted_data = prediction_all(name,'Low',df_main)
+        low = []
+        low = df_main['Low'].tolist()
+        low.extend(predicted_data)
 
-    predicted_data = prediction_all(name,'Low',df_main)
-    low = []
-    low = df_main['Low'].tolist()
-    low.extend(predicted_data)
-
+    #calculate next price
     predicted_data = prediction_all(name,'Last',df_main)
     close = []
+    #make a list of past prices
     close = df_main['Last'].tolist()
+    #for results we need last price of current data
     predicted_price.append(close[-1])
+    #add predicted price to variable for graph
     close.extend(predicted_data)
-
+    #make a list from date returned by QUANDL
     chart_date = df_main.index.tolist()
+    #append today's date to list
     for i in range(0,1):
         chart_date.append(date.today()+timedelta(i))
-
+    #check if this need to be done ( Don't need this for results part)
     if checker:
         trace = go.Candlestick(x=chart_date,
                 open = open,
@@ -86,9 +92,12 @@ def predicted_price(name, data, checker = True):
                 )
             )
         )
+        #make a lables to chart
         data = [trace]
         data = go.Figure(data=data, layout=layout)
+        #make chart and save it to plotly profile
         py.plot(data,layout,filename = 'predictedchart', auto_open=False)
+    #round to 1 if
     if name == "BTC" or name == "ETH":
         predicted_price.append(round(predicted_data[0],2))
     else:

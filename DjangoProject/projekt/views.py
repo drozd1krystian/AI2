@@ -50,12 +50,25 @@ def prediction(request):
 def results(request):
     #run function to check if predictions are close to right
     compare_results(database_adder("BTC",5))
-
+    number_of_hits_btc = float(0)
+    number_of_hits_eth = float(0)
     #get results from database
     results_btc = Results.objects.filter(nazwa = "BTC")
+    for result in results_btc:
+        rc_1 = result.cena
+        rc_2 = result.zamkniecie
+        if (abs(float(rc_1) - float(rc_2))) <= 3:
+            number_of_hits_btc += 1
+    number_of_hits_btc = ((len(results_btc)-number_of_hits_btc)/len(results_btc))*100
     results_eth = Results.objects.filter(nazwa = "ETH")
+    for result in results_eth:
+        rc_1 = result.cena
+        rc_2 = result.zamkniecie
+        if (abs(float(rc_1) - float(rc_2))) <= 0.5:
+            number_of_hits_eth += 1
+    number_of_hits_eth = ((len(results_eth)-number_of_hits_eth)/len(results_eth))*100
     #results_xrp = Results.objects.filter(nazwa = "XRP")
     #results_trx = Results.objects.filter(nazwa = "TRX")
     #results_ltc = Results.objects.filter(nazwa = "LTC")
 
-    return render(request,'projekt/results.html',{'results_btc':results_btc,'results_eth':results_eth})
+    return render(request,'projekt/results.html',{'results_btc':results_btc,'results_eth':results_eth,'number_of_hits_btc':number_of_hits_btc, 'number_of_hits_eth':number_of_hits_eth})
