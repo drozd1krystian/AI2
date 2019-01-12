@@ -146,3 +146,15 @@ def compare_results(date_results):
             date_as_string = str(date_results[i][0])
             price = predicted_price(name, str(date_results[i-1][0]), checker)
             add_results(name, date_as_string[0:10], price[1],price[0])
+
+def efficienct(data_set):
+    number_of_hits = float(0)
+    for result in data_set:
+        rc_1 = result.cena
+        rc_2 = result.zamkniecie
+        if (abs(float(rc_1) - float(rc_2))) <= 3:
+            number_of_hits += 1
+    if number_of_hits == 0:
+        return 0
+    number_of_hits = ((len(data_set)-number_of_hits)/len(data_set))*100
+    return number_of_hits
