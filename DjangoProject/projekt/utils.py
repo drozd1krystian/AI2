@@ -22,9 +22,10 @@ def prediction_all(name,df_column,df_main):
 
     X = np.array(df.drop(['Prediction'], 1))
     X = preprocessing.scale(X)
-    X_forecast = X[-forecast_out:] # set X_forecast equal to last 1
 
+    X_forecast = X[-forecast_out:] # set X_forecast equal to last 1
     X = X[:-forecast_out] # remove last 1 from X
+
     y = np.array(df['Prediction'])
     y = y[:-forecast_out]
 
@@ -149,10 +150,15 @@ def compare_results(date_results):
 
 def efficienct(data_set):
     number_of_hits = float(0)
+    price = 0
     for result in data_set:
+        if result.nazwa == "BTC":
+            price = 5;
+        else:
+            price = 0.5
         rc_1 = result.cena
         rc_2 = result.zamkniecie
-        if (abs(float(rc_1) - float(rc_2))) <= 3:
+        if (abs(rc_1 - rc_2)) <= price:
             number_of_hits += 1
     if number_of_hits == 0:
         return 0
